@@ -1,0 +1,116 @@
+{
+  "name": "AI Lure Designer Dev Environment",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "runArgs": [
+    "--privileged",
+    "--cap-add=SYS_PTRACE",
+    "--security-opt=seccomp=unconfined",
+    "--volume=/var/run/docker.sock:/var/run/docker.sock"
+  ],
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+    "source=lure-designer-node-modules,target=/workspace/frontend/node_modules,type=volume",
+    "source=lure-designer-pip-cache,target=/home/developer/.cache/pip,type=volume",
+    "source=lure-designer-supabase,target=/home/developer/.supabase,type=volume"
+  ],
+  "workspaceFolder": "/workspace",
+  "remoteUser": "developer",
+  "containerEnv": {
+    "DISPLAY": ":99",
+    "SUPABASE_LOCAL_PORT": "54321",
+    "FASTAPI_PORT": "8000",
+    "FRONTEND_PORT": "3000"
+  },
+  "forwardPorts": [
+    3000,
+    8000,
+    54321,
+    54322,
+    54323,
+    54324,
+    54325
+  ],
+  "portsAttributes": {
+    "3000": {
+      "label": "Next.js Frontend",
+      "onAutoForward": "notify"
+    },
+    "8000": {
+      "label": "FastAPI Backend",
+      "onAutoForward": "notify"
+    },
+    "54321": {
+      "label": "Supabase API",
+      "onAutoForward": "silent"
+    },
+    "54322": {
+      "label": "Supabase PostgreSQL",
+      "onAutoForward": "silent"
+    },
+    "54323": {
+      "label": "Supabase Auth",
+      "onAutoForward": "silent"
+    },
+    "54324": {
+      "label": "Supabase Storage",
+      "onAutoForward": "silent"
+    },
+    "54325": {
+      "label": "Supabase Edge Functions",
+      "onAutoForward": "silent"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.pylint",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "formulahendry.auto-rename-tag",
+        "christian-kohler.path-intellisense",
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "ms-vscode-remote.remote-containers",
+        "github.copilot",
+        "ms-toolsai.jupyter",
+        "ms-python.debugpy",
+        "supabase.supabase"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/bin/python3",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "python.formatting.provider": "black",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": true
+        },
+        "files.associations": {
+          "*.blend": "python"
+        },
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
+  "postStartCommand": "echo 'AI Lure Designer Dev Environment Ready! 🎣'",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest",
+      "ppa": true
+    }
+  }
+} 
