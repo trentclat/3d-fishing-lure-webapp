@@ -1,0 +1,4 @@
+<!-- viewer.html -->
+<input id="fileInput" type="file" accept=".obj,.gltf,.glb"/>
+<canvas id="viewer"></canvas>
+<script type="module" src="./viewer.js"></script>
